@@ -1,0 +1,12 @@
+{
+  "name": "openinstall",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "Index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@rnoh/react-native-openharmony": "^0.72.38",
+    "@openinstall/sdk": "2.1.0"
+  }
+}

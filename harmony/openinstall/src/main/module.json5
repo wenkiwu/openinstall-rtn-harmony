@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "rtn-openinstall",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ]
+  }
+}
