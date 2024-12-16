@@ -1,37 +1,33 @@
 {
-    "name": "rtn-openinstall",
-    "version": "0.0.1",
-    "description": "openinstall with TurboModules",
-    "react-native": "src/index",
-    "source": "src/index",
-    "files": [
-      "src",
-      "harmony",
-      "!android/build",
-      "!ios/build",
-      "!**/__tests__",
-      "!**/__fixtures__",
-      "!**/__mocks__"
-    ],
-    "keywords": ["react-native", "harmony", "openinstall"],
-    "repository": "https://github.com/openinstall/rtn-openinstall",
-    "author": "wenki",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/openinstall/rtn-openinstall/issues"
-    },
-    "homepage": "https://github.com/openinstall/rtn-openinstall#readme",
-    "devDependencies": {},
-    "peerDependencies": {
-      "react": "*",
-      "react-native": "*"
-    },
-    "harmony": {
-      "codegenConfig": {
-        "specPaths": [
-          "./src"
-        ]
-      }
-    }
+  "name": "rtn-openinstall",
+  "version": "0.0.1",
+  "description": "openinstall with TurboModules",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "harmony",
+    "!android/build",
+    "!ios/build",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "keywords": [
+    "react-native",
+    "harmony",
+    "openinstall"
+  ],
+  "repository": "https://github.com/wenkiwu/openinstall-rtn-harmony",
+  "author": "wenki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wenkiwu/openinstall-rtn-harmony/issues"
+  },
+  "homepage": "https://github.com/wenkiwu/openinstall-rtn-harmony#readme",
+  "devDependencies": {},
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   }
-  
+}

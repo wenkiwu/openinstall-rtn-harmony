@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "rtn-openinstall",
+    "name": "openinstall",
     "type": "har",
     "deviceTypes": [
       "default",

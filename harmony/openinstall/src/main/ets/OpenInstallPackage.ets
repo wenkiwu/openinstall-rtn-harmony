@@ -16,7 +16,7 @@ class OpenInstallModulesFactory extends TurboModulesFactory {
 }
 
 export class OpenInstallPackage extends RNPackage {
-  createTurboModulesFactory(ctx: TurboModuleContext): TurboModulesFactory<TurboModule, TurboModuleContext> {
+  createTurboModulesFactory(ctx: TurboModuleContext): TurboModulesFactory {
     return new OpenInstallModulesFactory(ctx)
   }
 }
