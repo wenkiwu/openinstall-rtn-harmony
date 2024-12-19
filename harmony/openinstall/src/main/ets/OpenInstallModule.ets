@@ -30,10 +30,7 @@ export class OpenInstallModule extends TurboModule {
     }
   }
 
-  getInstall(seconds?: number): Promise<string> {
-    if (seconds == null) {
-      seconds = 10
-    }
+  getInstall(seconds: number): Promise<Object> {
     console.debug("OpenInstallModule getInstall(%d)", seconds)
     return new Promise((resolve) => {
       OpenInstall.getInstall(seconds, {
@@ -49,7 +46,7 @@ export class OpenInstallModule extends TurboModule {
     })
   }
 
-  getWakeUp(url: string): Promise<string> {
+  getWakeUp(url: string): Promise<Object> {
     console.debug("OpenInstallModule getWakeUp uri = ", url)
     if (url == null) {
       return Promise.resolve(this.toResult("invalid uri"))
@@ -82,14 +79,14 @@ export class OpenInstallModule extends TurboModule {
     let extraMap = new Map<string, string>()
     if (extra) {
       console.debug("OpenInstallModule extra = " + JSON.stringify(extra))
-      for (let i = 0; i < extra.length - 1; i++) {
-        extraMap.set(extra[i], extra[i++])
+      for (let i = 0; i < extra.length - 1; ) {
+        extraMap.set(extra[i++], extra[i++])
       }
     }
     OpenInstall.reportEffectPoint(id, value, extraMap)
   }
 
-  reportShare(code: string, platform: string): Promise<string> {
+  reportShare(code: string, platform: string): Promise<Object> {
     console.debug("OpenInstallModule reportShare(%s, %s)", code, platform)
     return new Promise((resolve) => {
       OpenInstall.reportShare(code, platform, {
@@ -105,7 +102,7 @@ export class OpenInstallModule extends TurboModule {
     })
   }
 
-  private toResult(x: OpData | OpError | string): string {
+  private toResult(x: OpData | OpError | string): Object {
     let result = new ResultData()
     if (x instanceof OpData) {
       result.channel = x.channelCode
@@ -118,6 +115,6 @@ export class OpenInstallModule extends TurboModule {
     } else {
       result.message = x
     }
-    return JSON.stringify(result)
+    return result
   }
 }

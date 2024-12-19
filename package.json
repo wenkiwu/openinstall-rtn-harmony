@@ -1,11 +1,11 @@
 {
-  "name": "rtn-openinstall",
+  "name": "openinstall-rnoh",
   "version": "0.0.1",
   "description": "openinstall with TurboModules",
-  "react-native": "src/index",
-  "source": "src/index",
+  "react-native": "js/index",
+  "source": "js/index",
   "files": [
-    "src",
+    "js",
     "harmony",
     "!android/build",
     "!ios/build",
@@ -29,5 +29,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
+  },
+  "harmony": {
+    "alias": "openinstall-react-native"
   }
 }
