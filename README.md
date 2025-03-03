@@ -1,42 +1,37 @@
 #### React Native 工程配置
-1. 将 rtn-openinstall-0.0.1.tgz 文件放到工程目录同一级，在工程的根目录下，运行下面命令
+1. 将 openinstall-rnoh-0.1.0.tgz 文件放到工程目录同一级，在工程的根目录下，运行下面命令
 ```
-npm install rtn-openinstall@file:../rtn-openinstall-0.0.1.tgz
+npm install openinstall-rnoh@file:../openinstall-rnoh-0.1.0.tgz
 ```
-2. 在使用 openinstall 的文件中导入 `RTNOpenInstall`
+2. 在需要使用 openinstall 的文件中引入插件：
 ```
-import  RTNOpenInstall  from 'rtn-openinstall/src/NativeOpenInstall';
+import RTNOpenInstall from 'openinstall-react-native'
 ```
-3. 监听 `url` 事件，并且在回调中调用 `RTNOpenInstall.getWakeUp`
-```
-useEffect(() => {
-    // 添加 App 唤醒时 url 监听
-    let sub = DeviceEventEmitter.addListener("url", (data) => {
-        console.log("receive url event : " + JSON.stringify(data))
-        RTNOpenInstall.getWakeUp(data.url).then(ret => {
-            console.log("getWakeUp result = " + JSON.stringify(ret))
-        }).catch(e => {
-            console.log("getWakeUp error = " + JSON.stringify(e))
-        })
-    })
-    return () => {
-        sub?.remove()
-    };
-}, []);
-```
-> 必须在初始化之前添加监听，否则可能导致唤醒时无法收到事件
-4. 初始化
+3. 初始化
 ```
 RTNOpenInstall.init();
 ```
+4. 注册唤醒回调监听
+```
+  useEffect(() => {
+    const sub = RTNOpenInstall.addWakeUpListener((data: any) => {
+      setWakeupParam(JSON.stringify(data));
+    });
+    RTNOpenInstall?.init();
+    return () => {
+      sub?.remove();
+    };
+  }, []);
+```
+> 必须在初始化之前添加监听，否则可能导致唤醒时无法收到事件
+
 5. 获取安装参数
 ```
-RTNOpenInstall.getInstall().then(data => {
-    let resultData = JSON.parse(data)
-    console.log("channel=" + resultData.channel + ", data=" + JSON.stringify(resultData.data))
-}).catch(e => {
-    console.error(e)
-})
+  RTNOpenInstall.getInstall().then(data => {
+    setInstallParam(JSON.stringify(data));
+  }).catch(e => {
+    console.error(e);
+  });
 ```
 6. 事件上报  
 
@@ -48,15 +43,15 @@ RTNOpenInstall.reportRegister()
 ```
 RTNOpenInstall.reportEffectPoint("effect_test", 1) 
 // 支持携带额外参数
-RTNOpenInstall.reportEffectPoint("effect_detail", 1, ["x", "10", "y", "z"])
+RTNOpenInstall.reportEffectPoint("effect_detail", 1, { "k": "10", "x": "z" })
 ```
 分享上报
 ```
-RTNOpenInstall.reportShare("c1001", "QQ").then(ret =>  {
-    console.log("reportShare result = " + JSON.stringify(ret))
-}).catch(e => {
-    console.log("reportShare error = " + JSON.stringify(e))
-})
+  RTNOpenInstall?.reportShare("c1001", "QQ").then(ret => {
+    console.log("reportShare result = " + JSON.stringify(ret));
+  }).catch(e => {
+    console.log("reportShare error = " + JSON.stringify(e));
+  });
 ```
 #### 鸿蒙工程配置
 
@@ -64,19 +59,20 @@ RTNOpenInstall.reportShare("c1001", "QQ").then(ret =>  {
 ```
 {
   "overrides": {
+    "@openinstall/sdk": "2.2.0",  // 当 Harmony SDK 升级时可在此修改版本
     "@rnoh/react-native-openharmony" : "^0.72.38"
   }
 }
 
 ```
 2. 通过 har 包引入原生端代码   
-> har 包位于`rtn-openinstall`安装路径的 harmony 文件夹下
+> har 包位于模块安装路径的 harmony 文件夹下
 打开`entry/oh-package.json5` ，添加以下依赖
 ```
 {
   "dependencies": {
     "@rnoh/react-native-openharmony": "0.72.38",  // add
-    "openinstall": "file:../../node_modules/rtn-openinstall/harmony/openinstall.har"
+    "openinstall": "file:../../node_modules/openinstall-rnoh/harmony/openinstall.har"
   },
 }
 ```
@@ -97,7 +93,7 @@ add_compile_definitions(WITH_HITRACE_SYSTRACE)
 set(WITH_HITRACE_SYSTRACE 1) # for other CMakeLists.txt files to use
 
 add_subdirectory("${RNOH_CPP_DIR}" ./rn)
-add_subdirectory("${OH_MODULE_DIR}/openinstall/src/main/cpp" ./openinstall) # add
++ add_subdirectory("${OH_MODULE_DIR}/openinstall/src/main/cpp" ./openinstall) # add
 
 add_library(rnoh_app SHARED
     "./PackageProvider.cpp"
@@ -105,18 +101,18 @@ add_library(rnoh_app SHARED
 )
 
 target_link_libraries(rnoh_app PUBLIC rnoh)
-target_link_libraries(rnoh_app PUBLIC rnoh_openinstall)  # add
++ target_link_libraries(rnoh_app PUBLIC rnoh_openinstall)  # add
 ```
 打开 `entry/src/main/cpp/PackageProvider.cpp`，添加
 ```
 #include "RNOH/PackageProvider.h"
-#include "RTNOpenInstallPackage.h"   // add
++ #include "RTNOpenInstallPackage.h"   // add
 
 using namespace rnoh;
 
 std::vector<std::shared_ptr<Package>> PackageProvider::getPackages(Package::Context ctx) {
     return {
-        std::make_shared<RTNOpenInstallPackage>(ctx),  // add
++        std::make_shared<RTNOpenInstallPackage>(ctx),  // add
     };
 }
 ```
@@ -125,12 +121,11 @@ __修改文件后缀，将 RNPackagesFactory.ts文件后缀修改为ets__
 打开 `entry/src/main/ets/RNPackagesFactory.ets`，添加：
 ```
 import { RNPackageContext, RNPackage } from '@rnoh/react-native-openharmony/ts';
-import {OpenInstallPackage} from 'openinstall'  //add
++ import {OpenInstallPackage} from 'openinstall'  //add
 export function createRNPackages(ctx: RNPackageContext): RNPackage[] {
   return [
-    new OpenInstallPackage(ctx)  // add
++    new OpenInstallPackage(ctx)  // add
   ];
 }
 ```
-
-5. 在加载 bundle 的情况下编译运行
+5. 参考鸿蒙的集成文档添加权限，配置Appkey和scheme

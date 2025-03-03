@@ -48,7 +48,7 @@ export default class RTNOpenInstall {
         if (extra == null) {
             extra = {}
         }
-        let extraArray = []
+        let extraArray: string[] = []
         let i = 0
         for(const prop in extra){
             extraArray[i++] = prop
